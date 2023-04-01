@@ -1,3 +1,15 @@
+Immediately download:
+https://nulledbb.com/thread-COMETCHAT-v6-6-10-WITH-PHP-and-WORDPRESS-plugin
+https://doniaweb.com/topic/881-phpfox-v477-pro-all-plugins-social-network/
+https://doniaweb.com/topic/1435-cometchat-v712-nulled/#comment-8899
+https://www.foxnull.ml/scripts/phpfox-v4/phpfox-4-8-11-autoinstaller.html
+https://www.nulled.to/topic/947622-phpfox-v478-megapak-nulled-with-addons/
+
+Upgrade Phpfox
+
+Git Plasmmer Accounts (site, db), then fork branches: Orgut, Peeper, Frienzy, Guttye
+Plasmmer Accounts remove status-poster, feed, site statistics and friends online in dnd mode. also remove the search widget. also remove widgets from user profile. remove https://orgut.co/user/browse/
+
 futurely, purchase Phpfox, install (not SD), and if successful for 1 day then merge current plasmmeraccounts database; then experiment with remote MySQL database
 
 Plasmmer Accounts/Orgut take a look for working at:
@@ -16,7 +28,7 @@ Changed settings:
 Re-enter password on sign up / TRUE
 Captcha on Registration / TRUE
 Approve Users / TRUE
-Force Users to Upload Profile Image / TRUE
+Force Users to Upload Profile Image / TRUE (has been re-activated to test first spam question)
 Force Users to Reenter Email / TRUE
 Invite Only / TRUE
 Captcha on Login / TRUE
@@ -25,24 +37,37 @@ Verify Email At Signup / TRUE
 Enable Spam Check / TRUE
 External Links Warning / TRUE
 Comment Hash Check / TRUE
-Allow User Registration / FALSE
+Allow User Registration / FALSE (has been re-activated to test first spam question)
 User Login Method / "Both"
 Date of Birth (End) / "2004"
-Copyright / "(c) 2012-2023 Plasmmer"
+Copyright / "(c) 2012-2023 <a href="https://plasmmer.com/" target="_blank">Plasmmer</a>"
 Site Title / "Plasmmer Accounts"
+Thread Display / TRUE
+Site Title Delimiter / "-"
+Official Launch Date (Month/Day/Year) / "22/9/2012"
+Secure Pages with HTTPS / TRUE
+Secure Image Display / TRUE
+has set the first spam question
 
 Have to work on these settings:
 Terms & Privacy Confirmation
+Meta Keywords
+Meta Description
+Friends Only Community
 
 Actual version: 4.7.6
 
 The server's main .htaccess file was updated based on this: http://www.javascriptkit.com/howto/htaccess13.shtml
 has enabled Short URL and changed that in .htaccess
 Has changed permissions in public_html/PF.Base/file/settings/server.sett.php
+.htaccess file was also updated to redirect http to https
 
 Issues from the current version:
 - Can't access profiles even the self, gets error 500
-- Spam accounts incoming https://www.superdominios.org/home/viewticket.php?tid=141064&c=zRG3dZ8o
+- Spam accounts incoming https://www.superdominios.org/home/viewticket.php?tid=141064&c=zRG3dZ8o (the "Allow User Registration / FALSE" has stopped the spam, which is concerning but leads to lesser-paranoic clues)
+
+Tasks:
+- Moderation team as UserGroup; tackle disinformation
 
 https://docs.phpfox.com/display/FOX4DEVDOC/How+to+configuration+MySQL+Replication+in+phpFox
 https://docs.phpfox.com/display/FOX4MAN/Optimize+PHP+settings
@@ -55,3 +80,8 @@ https://community.phpfox.com/forum/thread/40672/help-being-spammed
 https://clients.phpfox.com/cart.php?a=checkout
 https://www.phpfoxer.com/phpfox-hosting
 https://www.phpfoxer.com/phpfox-themes
+
+Work as plugins or upstream to Phpfox:
+- Comment edit history
+- Dont hard-delete content, store a copy for legal purposes
+- Patch issue of spam accounts bypassing the "Force Users to Upload Profile Image"/"Invite Only"/"Approve Users" settings (that currently can be fixed only with the 'Allow User Registration / FALSE' setting)
