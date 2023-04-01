@@ -1,0 +1,57 @@
+futurely, purchase Phpfox, install (not SD), and if successful for 1 day then merge current plasmmeraccounts database; then experiment with remote MySQL database
+
+Plasmmer Accounts/Orgut take a look for working at:
+Apps:
+- Facebook Connect
+- Newsletter
+- CDN Service
+- phpFox CDN
+- Amazon CDN
+- Captcha
+- CKEditor
+- RESTful API
+- Mobile API
+
+Changed settings:
+Re-enter password on sign up / TRUE
+Captcha on Registration / TRUE
+Approve Users / TRUE
+Force Users to Upload Profile Image / TRUE
+Force Users to Reenter Email / TRUE
+Invite Only / TRUE
+Captcha on Login / TRUE
+Spam Check Requires All Questions / TRUE
+Verify Email At Signup / TRUE
+Enable Spam Check / TRUE
+External Links Warning / TRUE
+Comment Hash Check / TRUE
+Allow User Registration / FALSE
+User Login Method / "Both"
+Date of Birth (End) / "2004"
+Copyright / "(c) 2012-2023 Plasmmer"
+Site Title / "Plasmmer Accounts"
+
+Have to work on these settings:
+Terms & Privacy Confirmation
+
+Actual version: 4.7.6
+
+The server's main .htaccess file was updated based on this: http://www.javascriptkit.com/howto/htaccess13.shtml
+has enabled Short URL and changed that in .htaccess
+Has changed permissions in public_html/PF.Base/file/settings/server.sett.php
+
+Issues from the current version:
+- Can't access profiles even the self, gets error 500
+- Spam accounts incoming https://www.superdominios.org/home/viewticket.php?tid=141064&c=zRG3dZ8o
+
+https://docs.phpfox.com/display/FOX4DEVDOC/How+to+configuration+MySQL+Replication+in+phpFox
+https://docs.phpfox.com/display/FOX4MAN/Optimize+PHP+settings
+https://www.reddit.com/r/webdev/comments/54ffvm/phpfox_review_is_this_the_right_software_for_your/
+https://www.null-scripts.net/resources/phpfox-pro.4452/
+https://docs.phpfox.com/display/FOX4MAN/Installing+phpFox
+https://docs.phpfox.com/display/FOX4MAN/Upgrading+Your+phpFox+Website
+https://www.phpfox.com/blog/2019/how-to-prevent-phpfox-community-from-spam/
+https://community.phpfox.com/forum/thread/40672/help-being-spammed
+https://clients.phpfox.com/cart.php?a=checkout
+https://www.phpfoxer.com/phpfox-hosting
+https://www.phpfoxer.com/phpfox-themes
