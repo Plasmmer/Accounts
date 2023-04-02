@@ -1,0 +1,46 @@
+1. Introduction and Acceptance of Terms
+The Plasmmer Accounts website (the "Site") is provided to you subject to these Terms of Use ("TOU"). By accessing and using the Site, you agree to be bound by these TOU, which may be updated from time to time without notice to you. If you do not agree to these TOU, you should not use the Site.
+
+2. Use of Site
+The Site is intended for personal, non-commercial use. You may not use the Site for any illegal or unauthorized purpose, or in any manner that could damage, disable, overburden, or impair the Site or any other person's use of the Site.
+
+3. User Accounts
+In order to access certain features of the Site, you may need to create a user account. You are responsible for maintaining the confidentiality of your account information, including your password, and for all activities that occur under your account.
+
+4. User Content
+You are solely responsible for any content that you post, upload, publish, display, or otherwise make available on the Site ("User Content"). You represent and warrant that you own or have the necessary licenses, rights, consents, and permissions to use and authorize us to use your User Content in the manner contemplated by the Site.
+
+5. Prohibited Conduct
+You may not use the Site to:
+
+- Post, upload, publish, display, or otherwise make available any User Content that is unlawful, harmful, threatening, abusive, harassing, defamatory, vulgar, obscene, libelous, invasive of another's privacy, hateful, or racially, ethnically, or otherwise objectionable;
+- Post, upload, publish, display, or otherwise make available any unsolicited or unauthorized advertising, promotional materials, spam, or any other form of solicitation;
+- Impersonate any person or entity, or falsely state or otherwise misrepresent yourself or your affiliation with any person or entity;
+- Interfere with or disrupt the Site, servers, or networks connected to the Site, or violate any requirements, procedures, policies, or regulations of networks connected to the Site;
+- Use any automated means, including without limitation bots, crawlers, or spiders, to access the Site or collect information from the Site.
+
+6. Intellectual Property
+The Site and its contents, including but not limited to text, graphics, logos, images, and software, are the property of Plasmmer Accounts or its licensors and are protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, sell, or create derivative works based on the Site or its contents without our prior written consent.
+
+7. Disclaimer of Warranties
+The Site and its contents are provided "as is" without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, or non-infringement. We do not warrant that the Site will be uninterrupted or error-free, that defects will be corrected, or that the Site or its servers are free of viruses or other harmful components.
+
+8. Limitation of Liability
+In no event shall Plasmmer Accounts or its affiliates, partners, directors, officers, employees, agents, or licensors be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in connection with the use or inability to use the Site or its contents, whether based on warranty, contract, tort, or any other legal theory, even if we have been advised of the possibility of such damages.
+
+9. Termination of Accounts: We reserve the right to terminate any account that violates our terms of use, engages in illegal activities, or poses a threat to the security and integrity of our platform. We may also terminate accounts that are inactive for a prolonged period of time.
+
+10. Disclaimer of Warranties: Our platform is provided "as is" and we make no warranties or representations of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the platform or the information, products, services, or related graphics contained on the platform for any purpose. Any reliance you place on such information is therefore strictly at your own risk.
+
+11. Limitation of Liability: In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in connection with, the use of our platform.
+
+12. Indemnification: You agree to indemnify and hold us harmless from any claims, damages, liabilities, losses, costs and expenses (including reasonable attorneys’ fees) arising out of or in connection with your use of our platform, your breach of these terms of use, or your violation of any applicable laws, rules or regulations.
+
+13. Governing Law and Jurisdiction: These terms of use shall be governed by and construed in accordance with the laws of [insert jurisdiction], and any disputes relating to these terms of use shall be subject to the exclusive jurisdiction of the courts of [insert jurisdiction].
+
+14. Changes to Terms of Use: We reserve the right to modify these terms of use at any time, without prior notice to you. Any changes will be effective immediately upon posting the revised terms of use on our platform. Your continued use of our platform following any such changes constitutes your acceptance of the revised terms of use.
+
+15. Contact Us: If you have any questions or concerns about these terms of use, please contact us at [insert contact information].
+
+These Terms of Use were generated by ChatGPT and will be revisited some day.
+Plasmmer Accounts is in early development stages and published as-is, without any warranty.
