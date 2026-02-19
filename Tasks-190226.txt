@@ -1,0 +1,2 @@
+- accounts.plasmmer.perla.ink domain add to settings and repo info
+- criei o arquivo so pra uma ideia aq e nao lembro mais :P AH LEMBREI: um dia usar o 01VCS pra identificar quais commits foram feitos pelo GPT Codex!
