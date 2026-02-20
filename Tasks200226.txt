@@ -1,6 +1,9 @@
 - based on https://docs.wallet.human.tech/quick-start: add email and phone as WaaP-based account recovery options (and show these on claude-made settings page!) (part of the Safe's 1/N threshold?)
 - add a happy Plasmmer's 15 years (17/04/2011) on the dashboard <3
 - 'app is requesting access to your Plasmmer Accounts info' screen will abstract WaaPs EIP-1193?
+- before making the Safe creation factory, read: https://docs.safe.global/advanced/erc-4337/4337-safe
+- leave a task for later: deploying all existing users' Safes to the Plasmium chain
+- read these 'Tokenplate'/'tokenbase' convos on Grok and GPT (2025's)
 
 repo:
 - chk if 'https://github.com/Plasmmer/Accounts/tree/main/starter/nextjs-waap-bluesky/app/claude' didn't lose anything of 'https://github.com/Plasmmer/Accounts/tree/main/claude-work-190226'
