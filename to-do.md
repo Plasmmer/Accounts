@@ -94,3 +94,40 @@ This guide tracks the files moved into `claude-work-190226/`, what each one like
 - [ ] Define anti-scam + anti-rug controls for marketplace and social trading flows (risk labels, cooldowns, warning interrupts).
 - [ ] Add transaction limits and friction rules for minors and newly created accounts (daily caps, velocity limits, staged unlocks).
 - [ ] Design moderator audit trail with verifiable evidence and minimal-abuse safeguards (tamper-evident logs, scoped access, oversight process).
+
+## 8) PIX 2020-2026 security/usability mapping -> Plasmmer Safe parity backlog
+
+### A. BACEN / protocolo PIX (segurança e conforto) — mapear e portar conceito
+
+- [ ] Consolidar linha do tempo 2020-2026 das camadas de proteção do Pix (ex.: limites noturnos, bloqueio cautelar, MED, Pix Saque/Troco, Pix Cobrança, recorrência/automação, aproximação) com foco em requisito técnico reproduzível em contas Safe.
+- [ ] Definir equivalentes onchain+offchain para o limite noturno: policy module no Safe + janela de risco por horário/fuso + dupla confirmação para elevação temporária de limite.
+- [ ] Definir equivalente do bloqueio cautelar: “safe freeze mode” por risco de fraude, com duração curta, revisão humana e trilha auditável para desbloqueio.
+- [ ] Projetar “MED-like for Safe”: fluxo de contestação/devolução com evidência assinada, escrow temporário quando possível e decisão por política/árbitro.
+- [ ] Modelar equivalente de notificações de infração e reputação de chaves (risk registry): lista de contrapartes de alto risco com scoring verificável e política automática de fricção.
+- [ ] Portar conceitos de Pix Saque/Troco para cash-out assistido: limites por local/dispositivo, score de confiabilidade do operador e cooldown para primeira operação.
+- [ ] Mapear Pix Cobrança (vencimento, juros/multa, QR dinâmico) para cobrança programável em smart account com regras transparentes e anti-abuso.
+- [ ] Mapear Pix Agendado/Recorrente/Automático para “safe intents”: débito programado com teto por período, botão de kill-switch e aviso prévio obrigatório.
+- [ ] Estudar equivalente de Pix por aproximação (NFC/proximity UX): assinatura de baixo atrito com limites estritos, step-up biométrico e revogação instantânea.
+
+### B. Implementações de bancos (UX antifraude) — benchmark de conforto sem vigilância abusiva
+
+- [ ] Levantar recursos de bancos 2020-2026 (modo rua, limites por contexto, lista de confiança, geofencing opcional, delay anti-golpe, confirmação reforçada) e separar o que melhora segurança real vs teatro de segurança.
+- [ ] Definir “Modo Rua Web3” para Plasmmer: perfil de risco alto com limites ultra-restritivos, whitelists e bloqueio de novos destinatários por tempo mínimo.
+- [ ] Criar fluxo de “destinatário confiável” em Safe: quarentena inicial + redução gradual de fricção conforme histórico legítimo.
+- [ ] Criar assistente anti-scam no cliente (warning engine) para engenharia social: copywriting direto, sinais de urgência/fraude e confirmação em linguagem humana.
+- [ ] Definir política de step-up auth por risco (biometria/passkey + segundo fator social/recovery) sem coletar dados desnecessários.
+
+### C. Arquitetura Plasmmer Accounts on Safe — tarefas concretas de engenharia
+
+- [ ] Especificar stack de módulos Safe para limites, delay, allowlist/blocklist, spending caps e emergency pause por guardian.
+- [ ] Definir serviço de risk scoring offchain (device, padrão transacional, reputação da contraparte) com saídas minimizadas para onchain (flags/attestations, não PII).
+- [ ] Implementar trilha de auditoria verificável para incidentes de fraude: logs assinados, retenção mínima e acesso por papéis.
+- [ ] Definir playbook de suporte para recuperação pós-golpe (congelar, investigar, contestar, comunicar, restaurar) com SLA por severidade.
+- [ ] Validar compatibilidade legal BR (BACEN/LGPD/ECA quando menor) para cada controle de risco antes de rollout de produção.
+
+### D. Decisões de produto e governança (o que não pode virar marketing vazio)
+
+- [ ] Definir métricas de sucesso anti-fraude (taxa de perda, taxa de falso-positivo, tempo de recuperação, UX friction score) e publicar baseline trimestral.
+- [ ] Exigir A/B tests de segurança com critério ético: reduzir golpe sem aumentar exclusão financeira de perfis vulneráveis.
+- [ ] Criar comitê de revisão de regras de risco (produto + segurança + jurídico + comunidade) para evitar decisões opacas.
+- [ ] Documentar publicamente limites do sistema: o que protege, o que não protege, e quando intervenção humana é obrigatória.
