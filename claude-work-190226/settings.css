@@ -224,6 +224,53 @@
 .tag-onchain      { background: rgba(124,58,237,0.18); color: var(--s-text-accent); }
 .tag-decentralized { background: rgba(6,182,212,0.15); color: #67E8F9; }
 
+.tag-security { background: rgba(16,185,129,0.16); color: #6EE7B7; }
+
+/* ── Session Watch ─────────────────────────────────────────────────────── */
+.session-row {
+  display: grid;
+  grid-template-columns: 10px 1fr 128px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--s-border);
+}
+.session-row:last-child { border-bottom: none; }
+.session-row.success { background: rgba(16,185,129,0.03); }
+.session-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 5px rgba(255,255,255,0.04);
+}
+.session-pulse.blocked { background: var(--s-danger); box-shadow: 0 0 0 5px rgba(239,68,68,0.14); }
+.session-pulse.challenged { background: var(--s-warning); box-shadow: 0 0 0 5px rgba(245,158,11,0.14); }
+.session-pulse.allowed { background: var(--s-success); box-shadow: 0 0 0 5px rgba(16,185,129,0.14); }
+.session-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.session-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.session-title { font-size: 14px; font-weight: 600; color: var(--s-text-1); }
+.session-meta { font-size: 12px; color: var(--s-text-3); }
+.session-net-data { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--s-text-2); }
+.session-net-data strong { color: var(--s-text-1); font-weight: 600; }
+.session-badge.blocked { background: rgba(239,68,68,0.12); color: #FCA5A5; }
+.session-badge.challenged { background: rgba(245,158,11,0.16); color: #FCD34D; }
+.session-badge.allowed { background: rgba(16,185,129,0.14); color: #6EE7B7; }
+.minimap-placeholder {
+  min-height: 72px;
+  border: 1px dashed var(--s-border-hover);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: rgba(255,255,255,0.02);
+  color: var(--s-text-2);
+  font-size: 11px;
+}
+.minimap-placeholder span { font-size: 12px; color: var(--s-text-1); }
+.minimap-placeholder small { color: var(--s-text-3); }
+
 .sidebar-footer {
   margin-top: auto;
   padding: 4px 8px;
@@ -899,6 +946,8 @@
   .input-field { width: 100%; }
   .radio-group { flex-direction: column; }
   .danger-row  { flex-direction: column; align-items: flex-start; }
+  .session-row { grid-template-columns: 10px 1fr; }
+  .minimap-placeholder { grid-column: 2; width: 100%; min-height: 54px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

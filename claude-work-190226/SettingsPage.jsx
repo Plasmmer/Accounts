@@ -47,6 +47,59 @@ const MOCK_ALERTS = [
   { id: 6, event: 'outgoing_tx',        label: 'Transação enviada',        enabled: false },
 ]
 
+const MOCK_LOGIN_ATTEMPTS = [
+  {
+    id: 'attempt-1',
+    status: 'blocked',
+    source: 'Senha incorreta (5x)',
+    ip: '185.31.12.99',
+    location: 'Minsk, Belarus',
+    occurredAt: '20/02/2026 · 00:52 UTC',
+    minimap: 'placeholder',
+  },
+  {
+    id: 'attempt-2',
+    status: 'challenged',
+    source: 'Nova fingerprint + TOR',
+    ip: '104.244.77.10',
+    location: 'Frankfurt, Germany',
+    occurredAt: '19/02/2026 · 23:40 UTC',
+    minimap: 'placeholder',
+  },
+  {
+    id: 'attempt-3',
+    status: 'allowed',
+    source: 'Login normal + 2FA ok',
+    ip: '177.220.14.24',
+    location: 'Itajaí, BR',
+    occurredAt: '19/02/2026 · 22:11 UTC',
+    minimap: 'placeholder',
+  },
+]
+
+const MOCK_SUCCESS_SESSIONS = [
+  {
+    id: 'session-1',
+    device: 'Chrome · Windows 11',
+    sessionType: 'Sessão principal',
+    ip: '177.220.14.24',
+    location: 'Itajaí, BR',
+    startedAt: '20/02/2026 · 00:11 UTC',
+    lastSeen: 'agora',
+    minimap: 'placeholder',
+  },
+  {
+    id: 'session-2',
+    device: 'Safari · iPhone',
+    sessionType: 'Mobile confiável',
+    ip: '2804:14d:5b2a::77',
+    location: 'Balneário Camboriú, BR',
+    startedAt: '19/02/2026 · 19:05 UTC',
+    lastSeen: 'há 14 min',
+    minimap: 'placeholder',
+  },
+]
+
 // ─── Ícones SVG inline ─────────────────────────────────────────────────────
 
 const icons = {
@@ -65,6 +118,7 @@ const icons = {
   trash:      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>,
   chain:      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>,
   download:   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+  sessions:   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10"/><path d="M7 13h6"/><circle cx="17" cy="15" r="2.5"/></svg>,
 }
 
 // ─── Nav items da sidebar ─────────────────────────────────────────────────
@@ -77,6 +131,7 @@ const NAV = [
   { id: 'recovery', label: 'Social Recovery', icon: icons.recovery, tag: 'on-chain'       },
   { id: 'dao',      label: 'DAO Memberships', icon: icons.dao,      tag: null             },
   { id: 'alerts',   label: 'On-chain Alerts', icon: icons.alerts,   tag: 'on-chain'       },
+  { id: 'sessions', label: 'Session Watch',   icon: icons.sessions, tag: 'security'       },
   { id: 'data',     label: 'Data Sovereignty',icon: icons.data,     tag: 'decentralized'  },
   { id: 'danger',   label: 'Danger Zone',     icon: icons.danger,   tag: null             },
 ]
@@ -663,6 +718,87 @@ function SectionData() {
   )
 }
 
+// ─── SEÇÃO: Login Attempts & Sessions (mock) ─────────────────────────────
+
+function SessionStatusBadge({ status }) {
+  const labels = {
+    blocked: 'Bloqueada',
+    challenged: 'Challenge',
+    allowed: 'Permitida',
+  }
+
+  return <span className={`badge session-badge ${status}`}>{labels[status] || 'Evento'}</span>
+}
+
+function SectionSessions() {
+  return (
+    <section className="settings-section" id="sessions">
+      <SectionHeader
+        icon={icons.sessions}
+        title="Session Watch"
+        subtitle="Mock de observabilidade para tentativas de login e sessões ativas com placeholder para IP, localização e minimapa"
+      />
+
+      <div className="setting-card">
+        <div className="section-sub-header">
+          <span>Tentativas de login recentes</span>
+          <span className="badge badge-muted">Janela: últimas 24h</span>
+        </div>
+
+        {MOCK_LOGIN_ATTEMPTS.map(attempt => (
+          <div key={attempt.id} className="session-row">
+            <div className={`session-pulse ${attempt.status}`} aria-hidden="true" />
+            <div className="session-info">
+              <div className="session-title-row">
+                <span className="session-title">{attempt.source}</span>
+                <SessionStatusBadge status={attempt.status} />
+              </div>
+              <span className="session-meta">{attempt.occurredAt}</span>
+              <div className="session-net-data">
+                <span><strong>IP:</strong> {attempt.ip}</span>
+                <span><strong>Local:</strong> {attempt.location}</span>
+              </div>
+            </div>
+            <div className="minimap-placeholder" aria-label="Placeholder minimapa tentativa">
+              <span>🗺️ minimap</span>
+              <small>{attempt.minimap}</small>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="setting-card">
+        <div className="section-sub-header">
+          <span>Sessões com autenticação concluída</span>
+          <button className="btn-ghost-sm">Encerrar todas exceto atual</button>
+        </div>
+
+        {MOCK_SUCCESS_SESSIONS.map(session => (
+          <div key={session.id} className="session-row success">
+            <div className="session-pulse allowed" aria-hidden="true" />
+            <div className="session-info">
+              <div className="session-title-row">
+                <span className="session-title">{session.device}</span>
+                <span className="badge badge-success">Ativa</span>
+              </div>
+              <span className="session-meta">{session.sessionType} · iniciou em {session.startedAt}</span>
+              <div className="session-net-data">
+                <span><strong>IP:</strong> {session.ip}</span>
+                <span><strong>Local:</strong> {session.location}</span>
+                <span><strong>Último seen:</strong> {session.lastSeen}</span>
+              </div>
+            </div>
+            <div className="minimap-placeholder" aria-label="Placeholder minimapa sessão">
+              <span>📍 minimap</span>
+              <small>{session.minimap}</small>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 // ─── SEÇÃO: Danger Zone ───────────────────────────────────────────────────
 
 function SectionDanger() {
@@ -762,6 +898,7 @@ export default function SettingsPage() {
     recovery: <SectionRecovery />,
     dao:      <SectionDAO />,
     alerts:   <SectionAlerts />,
+    sessions: <SectionSessions />,
     data:     <SectionData />,
     danger:   <SectionDanger />,
   }
