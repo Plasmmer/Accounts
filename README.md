@@ -30,3 +30,11 @@ Based on official docs at `https://docs.wallet.human.tech/quick-start`, active p
 - Configuration decisions should explicitly track: `authenticationMethods`, `allowedSocials`, project branding fields, and style settings.
 - Sui support exists through `initWaaPSui`; it is not in v0 scope but is now documented as a future extension seam.
 - Team can use WaaP Playground (`/playground`) to generate/validate config before shipping.
+
+## Screenshots
+
+Atualmente, o app funcional expõe uma tela principal (`/`) no starter Next.js. Abaixo está a captura dessa tela inicial.
+
+| Tela | Preview |
+|---|---|
+| Home (`/`) | ![Tela inicial do Plasmmer Accounts v0 Starter](docs/screenshots/home-screen.png) |
