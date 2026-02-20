@@ -67,3 +67,30 @@ This guide tracks the files moved into `claude-work-190226/`, what each one like
 - [ ] Add UI gating rule: disable auth CTAs until provider (`window.waap`) is ready.
 - [ ] Capture explicit statement that Sui (`initWaaPSui`) is post-v0 only.
 - [ ] Add minimal provider smoke test flow to avoid broken-click UX.
+
+## 7) Social/P2E child-safety, privacy, and legal guardrails (COPPA/ECA)
+
+### A. COPPA (US) + ECA (BR) compliance mapping
+
+- [ ] Map mandatory obligations for child/teen protection in social + play-to-earn contexts, covering age thresholds, parental/legal consent paths, moderation duties, and escalation requirements.
+- [ ] Produce a requirement matrix comparing COPPA vs ECA for account creation, chat/social spaces, marketplace access, and rewards mechanics.
+- [ ] Define evidence/record-keeping expectations for consent and safety actions without expanding surveillance beyond legal necessity.
+
+### B. Plasmmer Accounts “teen-safe by default” decision
+
+- [ ] Decide whether Plasmmer Accounts should enforce a default mandatory teen-safe mode (opt-out only after age/legal checks where allowed).
+- [ ] Document what teen-safe mode changes by default (DM permissions, discoverability, trade restrictions, payout velocity, and session/time limits).
+- [ ] Add governance decision log entry: legal rationale, product tradeoffs, and explicit risk acceptance if default teen-safe is not adopted.
+
+### C. Age assurance + minimal-KYC architecture (privacy-preserving)
+
+- [ ] Define age-assurance flow (age-band attestations, parental consent attestations where needed) that avoids storing raw PII onchain.
+- [ ] Specify minimum-KYC strategy using offchain verifiers + onchain proofs/claims (attestation pointers, revocation checks, expiry windows).
+- [ ] Add explicit data-minimization policy: what must never touch chain, retention windows, and deletion/right-to-review handling.
+
+### D. “Habbo Web3” (PHIland/box now, Habbo-like later) safety controls
+
+- [ ] Define anti-grooming controls for chat/rooms (behavioral flags, trust-level gating, rapid-response moderator workflows).
+- [ ] Define anti-scam + anti-rug controls for marketplace and social trading flows (risk labels, cooldowns, warning interrupts).
+- [ ] Add transaction limits and friction rules for minors and newly created accounts (daily caps, velocity limits, staged unlocks).
+- [ ] Design moderator audit trail with verifiable evidence and minimal-abuse safeguards (tamper-evident logs, scoped access, oversight process).
