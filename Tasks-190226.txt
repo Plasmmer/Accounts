@@ -1,2 +1,16 @@
 - accounts.plasmmer.perla.ink domain add to settings and repo info
+
 - criei o arquivo so pra uma ideia aq e nao lembro mais :P AH LEMBREI: um dia usar o 01VCS pra identificar quais commits foram feitos pelo GPT Codex!
+https://www.google.com/search?q=gpt+codex+change+git+committer&oq=gpt+codex+change+git+committer&gs_lcrp=EgZjaHJvbWUyCAgAEEUYFRg5MgcIARAhGKABMgcIAhAhGKABMgcIAxAhGKABMgcIBBAhGI8C0gEINDU3NGowajeoAgCwAgA&sourceid=chrome&ie=UTF-8:
+"To change the git committer/author when using GPT Codex, you can override the default settings by running the commit command with environment variables or using git commit --amend to update previous commits. A specific workaround is to use GIT_AUTHOR_NAME="$(git config user.name) (codex)" git commit to append identifying info. 
+GitHub
+GitHub
+ +1
+Here are the methods to change the committer:
+Temporary Override (Before Commit): Run the following command to explicitly set the author for the next commit:
+GIT_AUTHOR_NAME="Your Name" GIT_AUTHOR_EMAIL="your@email.com" git commit -m "Message".
+Modify Last Commit: Use git commit --amend --author="New Name <email@example.com>" --no-edit to correct the committer of the immediately preceding commit.
+Configure Git Globally: Change your permanent git settings using:
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com".
+For git-gpt-commit users: If using git-gpt-commit, the tool uses your local git config, so changing the global or local config (as above) will change the committer. "
