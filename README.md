@@ -43,3 +43,4 @@ Atualmente, o starter Next.js possui a home (`/`) e também layouts visualizáve
 | Claude — Settings (`/claude/settings`) | `claude-work-190226/SettingsPage.jsx` + atualização OpenClawd agents | ![Preview atualizado da página Settings Dashboard](docs/screenshots/claude-settings.png) |
 | Claude — Settings Additions (`/claude/settings-additions`) | `claude-work-190226/SettingsAdditions.jsx` | ![Preview da página Settings Additions](docs/screenshots/claude-settings-additions.png) |
 | Claude — App Access Request (`/claude/access-request`) | Mock novo de consentimento Plasmmer Account | ![Preview da tela de solicitação de acesso](docs/screenshots/claude-access-request.png) |
+| Claude — Family & Dependants (`/claude/family`) | Mock acionável de gestão familiar (custódia, limites e safeguard rails) | ![Preview da tela Family & Dependants](docs/screenshots/claude-family.png) |
