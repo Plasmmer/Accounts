@@ -3,6 +3,7 @@
 - 'app is requesting access to your Plasmmer Accounts info' screen will abstract WaaPs EIP-1193?
 
 repo:
+- chk if 'https://github.com/Plasmmer/Accounts/tree/main/starter/nextjs-waap-bluesky/app/claude' didn't lose anything of 'https://github.com/Plasmmer/Accounts/tree/main/claude-work-190226'
 - add all of the Codex conversations
 - fix LFS readme.md screenshots issue
 - look at all of the commits past 20/02/2026 looking for authors' to fix
