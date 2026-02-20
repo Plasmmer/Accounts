@@ -4,9 +4,9 @@
 
 **Plasmmer Accounts v0** replaces the earlier Zama/Arcium FHE+MPC direction with a practical identity + wallet onboarding flow:
 
-1. User creates/signs into a **Bluesky** account.
-2. App uses **WaaP.xyz** (Wallet as a Protocol) to derive and manage an **Ethereum address**.
-3. The user signs in to integrated apps with a seedless experience.
+1. User enters through **WaaP.xyz** authentication.
+2. Inside WaaP, the user authenticates with **Bluesky** (only enabled identity option).
+3. WaaP derives and manages an **Ethereum address** for seedless app access.
 
 This document is the implementation baseline for product and engineering.
 
@@ -15,7 +15,7 @@ This document is the implementation baseline for product and engineering.
 ## Goals
 
 - Provide a seedless signup/login experience for web3-enabled apps.
-- Use Bluesky as the user-facing identity entry point.
+- Use WaaP.xyz as the user-facing entry point with Bluesky-only identity inside WaaP.
 - Use WaaP.xyz for wallet session management and Ethereum address derivation.
 - Standardize integration across multiple downstream projects.
 
@@ -31,27 +31,27 @@ This document is the implementation baseline for product and engineering.
 
 ### A. Signup
 
-1. User clicks **Continue with Bluesky**.
-2. User authenticates with Bluesky.
-3. Backend verifies Bluesky auth result and issues an app session token.
-4. App initializes WaaP context/provider.
-5. If no wallet session exists, app triggers WaaP login/init flow.
+1. User clicks **Continue with WaaP**.
+2. WaaP login modal/page opens with **Bluesky as the only enabled identity option**.
+3. User authenticates to Bluesky through WaaP.
+4. Backend verifies WaaP-authenticated Bluesky identity and issues an app session token.
+5. App initializes WaaP context/provider.
 6. WaaP returns wallet context and an EVM-compatible account.
 7. App stores the derived Ethereum address linked to the Bluesky identity.
 8. User enters the application as an authenticated account.
 
 ### B. Login (returning user)
 
-1. User authenticates via Bluesky.
-2. App resolves existing account record.
-3. App restores WaaP session (or requests re-auth if expired).
-4. App confirms Ethereum address binding.
-5. User enters app with active identity + wallet context.
+1. User clicks **Continue with WaaP**.
+2. WaaP handles identity re-auth via Bluesky (only option).
+3. App resolves existing account record.
+4. App restores WaaP session (or requests re-auth if expired).
+5. App confirms Ethereum address binding and enters with active identity + wallet context.
 
 ### C. Failure/Recovery Paths
 
-- **Bluesky success, WaaP failure:** create partial session state and prompt wallet retry.
-- **WaaP success, Bluesky failure:** do not finalize app login.
+- **WaaP/Bluesky identity success, wallet failure:** create partial session state and prompt wallet retry.
+- **WaaP success, Bluesky verification failure:** do not finalize app login.
 - **Address mismatch on returning user:** lock high-risk actions, require explicit re-link flow.
 - **Provider outage:** fallback banner + retry queue for wallet-dependent actions.
 
@@ -111,7 +111,7 @@ Plasmmer Accounts v0 should be reusable in:
 ### Integration checklist (per app)
 
 - [ ] Add shared Plasmmer Accounts v0 auth module.
-- [ ] Add Bluesky login button/entry route.
+- [ ] Add WaaP login button/entry route (Bluesky-only within WaaP).
 - [ ] Add WaaP provider + wallet session handling.
 - [ ] Persist/consume linked Ethereum address.
 - [ ] Gate wallet-required features on wallet availability.

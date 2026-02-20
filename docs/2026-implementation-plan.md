@@ -4,7 +4,7 @@
 
 Ship a production-ready account layer that combines:
 
-1. **Bluesky identity authentication**
+1. **WaaP.xyz-first authentication with Bluesky as the only login option**
 2. **WaaP.xyz wallet session + Ethereum address derivation**
 
 for reuse across:
@@ -20,13 +20,13 @@ for reuse across:
   - identity state machine
   - wallet state machine
   - account bootstrap API client
-- Add Bluesky auth callback route + token validation endpoint.
+- Add WaaP auth callback route with Bluesky-only token validation endpoint.
 - Add WaaP provider at root and account context bridge.
 - Persist mapping: `bluesky_did -> account_id -> eth_address`.
 
 ### Exit criteria
 
-- New user can complete Bluesky sign-in and receive linked Ethereum address.
+- New user can complete WaaP sign-in (Bluesky-only identity) and receive linked Ethereum address.
 - Returning user can restore both identity and wallet session.
 - Failure states surface actionable UI.
 
@@ -64,8 +64,8 @@ for reuse across:
 4. Add auth integration tests for:
    - first-time signup
    - returning login
-   - Bluesky success + WaaP failure
-   - Bluesky failure + WaaP success
+   - WaaP/Bluesky identity success + wallet failure
+   - WaaP session success + Bluesky verification failure
 5. Add observability dashboard for onboarding funnel.
 
 ## Non-goals for v0

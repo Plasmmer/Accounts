@@ -1,1 +1,3 @@
 *.pptx
+node_modules/
+starter/nextjs-waap-bluesky/node_modules/
