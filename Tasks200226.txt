@@ -1,3 +1,1 @@
 - based on https://docs.wallet.human.tech/quick-start: add email and phone as WaaP-based account recovery options (and show these on claude-made settings page!)
-- 'app is requesting access to your Plasmmer Account ; it will see your: name, email, avatar' mock screen
-- mock for https://docs.wallet.human.tech/recipes/human-passport so show the human passport info on the user dashboard! (same screen that have subscriptions and stuff)
