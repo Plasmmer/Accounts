@@ -69,3 +69,8 @@ Build a private ENS-like naming/payment layer (potentially on Aztec or later Zam
 - [ ] Define threat model for provider downtime (Bluesky/WaaP) and fallback keys.
 - [ ] Specify account activity/audit log schema for failed attempts + sessions.
 
+## Quick Start-informed roadmap updates (2026-02-20)
+
+- Add a post-v0 task to evaluate when/if Sui support should move from documented seam to implemented feature (`initWaaPSui`).
+- Standardize a config-governance workflow: playground snapshot -> PR checklist -> runtime config parity validation.
+- Treat provider compatibility guarantees as contract tests (EIP-1193 conformance across app integrations).

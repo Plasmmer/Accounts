@@ -33,3 +33,12 @@ Date: 2026-02-20
 ## Scope reminder
 
 - Manus remains UI-focused in this handoff and should not own production `/api/*` contract design or DB rollout.
+
+## Quick Start page validation updates (2026-02-20)
+
+Official Quick Start review confirms:
+
+- Recommended bootstrap is a 3-step path (install SDK, initialize WaaP, customize config).
+- EVM compatibility promise is explicitly EIP-1193 via `window.waap` for wagmi/ethers/viem/plain JS.
+- Official docs promote WaaP Playground for generating init config; this should be used as a reproducible config source in delivery notes.
+- Sui path is first-class (`initWaaPSui`) but remains out-of-scope for current Plasmmer Accounts v0 execution.

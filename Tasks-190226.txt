@@ -14,3 +14,8 @@ Configure Git Globally: Change your permanent git settings using:
 git config --global user.name "Your Name"
 git config --global user.email "your@email.com".
 For git-gpt-commit users: If using git-gpt-commit, the tool uses your local git config, so changing the global or local config (as above) will change the committer. "
+
+- [Quick Start sync] usar docs oficiais do WaaP como baseline: install SDK -> initWaaP -> customize config.
+- [Quick Start sync] adicionar snapshot do Playground do WaaP nas docs pra evitar config drift entre ambiente local/staging/prod.
+- [Quick Start sync] garantir regra funcional: CTA de login só habilita com provider pronto (`window.waap`).
+- [Quick Start sync] manter Sui (`initWaaPSui`) documentado como trilha pós-v0, sem virar escopo escondido agora.

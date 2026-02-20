@@ -20,3 +20,13 @@ This repository has been reset to focus on **Plasmmer Accounts v0 (2026)**.
 
 - Active planning/design belongs under `docs/`.
 - Legacy artifacts are preserved under `legacy/` for reference only.
+
+## WaaP Quick Start alignment (2026-02-20)
+
+Based on official docs at `https://docs.wallet.human.tech/quick-start`, active planning now assumes:
+
+- Baseline integration is the 3-step flow: **install SDK -> initialize `initWaaP` -> customize config**.
+- EVM integration must treat `window.waap` as the EIP-1193 provider compatible with wagmi/ethers/viem/plain JS.
+- Configuration decisions should explicitly track: `authenticationMethods`, `allowedSocials`, project branding fields, and style settings.
+- Sui support exists through `initWaaPSui`; it is not in v0 scope but is now documented as a future extension seam.
+- Team can use WaaP Playground (`/playground`) to generate/validate config before shipping.

@@ -60,3 +60,10 @@ This guide tracks the files moved into `claude-work-190226/`, what each one like
 - Front-end: JSX + CSS alignment.
 - Protocol: identity contract and app integration.
 
+## 6) WaaP Quick Start sync tasks (2026-02-20)
+
+- [ ] Add a single source-of-truth config snapshot from WaaP Playground to `docs/`.
+- [ ] Confirm `initWaaP` options are documented with rationale (`authenticationMethods`, `allowedSocials`, styles, branding, `showSecured`).
+- [ ] Add UI gating rule: disable auth CTAs until provider (`window.waap`) is ready.
+- [ ] Capture explicit statement that Sui (`initWaaPSui`) is post-v0 only.
+- [ ] Add minimal provider smoke test flow to avoid broken-click UX.

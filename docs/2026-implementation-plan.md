@@ -73,3 +73,18 @@ for reuse across:
 - Custom MPC/FHE infra.
 - Multi-provider wallet abstraction.
 - Full account migration from every legacy auth method.
+
+## Quick Start alignment updates (source: docs.wallet.human.tech/quick-start)
+
+### Required baseline in Phase 1
+
+- Keep SDK install/init as explicit acceptance criteria (`@human.tech/waap-sdk`, `initWaaP`).
+- Ensure init config review includes: auth methods, allowed socials, project info, style options, and `showSecured` behavior.
+- Treat `window.waap` EIP-1193 compatibility as a testable requirement against at least one library stack (viem or ethers).
+- Add a documented decision note for `useStaging` value per environment.
+
+### Added engineering tasks
+
+6. Add a "WaaP Playground config snapshot" artifact to docs for reproducible init settings.
+7. Add automated smoke test that confirms provider availability (`window.waap`) before auth UI enables login actions.
+8. Add explicit non-goal note for Sui in v0 and a planned seam (`initWaaPSui`) for post-v0.

@@ -51,10 +51,115 @@ export type AccountBootstrapResponse = {
   };
   metadata?: {
     provider: 'waap';
+    storage: 'local' | 'api';
+    addressStatus: 'new' | 'existing' | 'unknown';
     createdAt: string;
     updatedAt: string;
   };
 };
+
+type LocalAccountRecord = {
+  accountId: string;
+  loginMethod: string;
+  address: string;
+  blueskyDid: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+const LOCAL_ACCOUNTS_KEY = 'plasmmer.accounts.v0.local';
+
+function makeLocalAccountId(loginMethod: string) {
+  const normalized = loginMethod.replace(/[^a-z0-9]/gi, '').toLowerCase() || 'social';
+  return `acct_local_${normalized.slice(0, 16)}`;
+}
+
+function loadLocalAccounts(): Record<string, LocalAccountRecord> {
+  const raw = window.localStorage.getItem(LOCAL_ACCOUNTS_KEY);
+
+  if (!raw) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(raw) as Record<string, LocalAccountRecord>;
+  } catch {
+    return {};
+  }
+}
+
+function saveLocalAccounts(data: Record<string, LocalAccountRecord>) {
+  window.localStorage.setItem(LOCAL_ACCOUNTS_KEY, JSON.stringify(data));
+}
+
+function shouldUseLocalBootstrap() {
+  return process.env.NEXT_PUBLIC_ACCOUNTS_BOOTSTRAP_MODE !== 'api';
+}
+
+function localBootstrapByLoginMethod(input: { loginMethod: string; address: string }): AccountBootstrapResponse {
+  const now = new Date().toISOString();
+  const records = loadLocalAccounts();
+  const existing = records[input.loginMethod];
+
+  if (!existing) {
+    const created: LocalAccountRecord = {
+      accountId: makeLocalAccountId(input.loginMethod),
+      loginMethod: input.loginMethod,
+      address: input.address,
+      blueskyDid: null,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    records[input.loginMethod] = created;
+    saveLocalAccounts(records);
+
+    return {
+      accountId: created.accountId,
+      blueskyDid: created.blueskyDid,
+      address: created.address,
+      loginMethod: created.loginMethod,
+      sessionFlags: {
+        needsWaaPReauth: false,
+        walletUnlinked: false,
+      },
+      metadata: {
+        provider: 'waap',
+        storage: 'local',
+        addressStatus: 'new',
+        createdAt: created.createdAt,
+        updatedAt: created.updatedAt,
+      },
+    };
+  }
+
+  const updated: LocalAccountRecord = {
+    ...existing,
+    address: input.address,
+    updatedAt: now,
+  };
+
+  records[input.loginMethod] = updated;
+  saveLocalAccounts(records);
+
+  return {
+    accountId: updated.accountId,
+    blueskyDid: updated.blueskyDid,
+    address: updated.address,
+    loginMethod: updated.loginMethod,
+    sessionFlags: {
+      needsWaaPReauth: false,
+      walletUnlinked: false,
+    },
+    metadata: {
+      provider: 'waap',
+      storage: 'local',
+      addressStatus: existing.address === input.address ? 'existing' : 'new',
+      createdAt: updated.createdAt,
+      updatedAt: updated.updatedAt,
+    },
+  };
+}
 
 export async function connectWaaP(_intent: AuthIntent): Promise<string[]> {
   const waap = ensureWaaP();
@@ -106,6 +211,13 @@ export async function fetchAccountBootstrap(): Promise<AccountBootstrapResponse>
     };
   }
 
+  if (shouldUseLocalBootstrap()) {
+    return localBootstrapByLoginMethod({
+      loginMethod,
+      address,
+    });
+  }
+
   const res = await fetch('/api/accounts/bootstrap', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -120,5 +232,15 @@ export async function fetchAccountBootstrap(): Promise<AccountBootstrapResponse>
     throw new Error('Backend account bootstrap failed');
   }
 
-  return (await res.json()) as AccountBootstrapResponse;
+  const payload = (await res.json()) as AccountBootstrapResponse;
+  return {
+    ...payload,
+    metadata: payload.metadata
+      ? {
+          ...payload.metadata,
+          storage: 'api',
+          addressStatus: 'unknown',
+        }
+      : undefined,
+  };
 }
