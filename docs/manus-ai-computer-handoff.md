@@ -46,3 +46,10 @@ Manus is responsible for the **UI design and implementation** of:
 ## Continuation references
 
 - See `docs/manus-claudecode-resume-notes.md` for environment limitations and the exact backend/SDK tasks to resume once network access is available.
+
+## Quick Start constraints for Manus (added 2026-02-20)
+
+- UI must assume WaaP is initialized through official `initWaaP` config before auth CTA becomes actionable.
+- Keep login CTA disabled until provider availability checks pass (`window.waap` ready).
+- Preserve copy clarity that EVM wallet behavior is WaaP-provider driven (EIP-1193 path), not a custom in-app wallet modal.
+- If proposing Sui visuals, tag them as post-v0 exploratory only (actual v0 remains EVM-first).

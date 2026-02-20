@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { assertWaaPConfig } from './waap.config';
-import { connectWaaP, disconnectWaaP, fetchAccountBootstrap } from '../lib/identity';
+import { connectWaaP, disconnectWaaP, fetchAccountBootstrap, type AccountBootstrapResponse } from '../lib/identity';
 
 type AuthIntent = 'signin' | 'signup';
 
@@ -12,6 +12,7 @@ type WaaPContextValue = {
   status: 'idle' | 'connecting' | 'connected' | 'error';
   error: string | null;
   intent: AuthIntent;
+  bootstrap: AccountBootstrapResponse | null;
   signIn: () => Promise<void>;
   signUp: () => Promise<void>;
   logout: () => Promise<void>;
@@ -26,6 +27,7 @@ export function WaaPProvider({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<WaaPContextValue['status']>('idle');
   const [error, setError] = useState<string | null>(null);
   const [intent, setIntent] = useState<AuthIntent>('signin');
+  const [bootstrap, setBootstrap] = useState<AccountBootstrapResponse | null>(null);
 
   async function completeAuth(nextIntent: AuthIntent) {
     try {
@@ -57,6 +59,7 @@ export function WaaPProvider({ children }: { children: React.ReactNode }) {
   async function refreshBootstrap() {
     try {
       const bootstrap = await fetchAccountBootstrap();
+      setBootstrap(bootstrap);
       setAddress(bootstrap.address);
       setIsConnected(Boolean(bootstrap.address));
       setStatus(bootstrap.address ? 'connected' : 'idle');
@@ -73,14 +76,15 @@ export function WaaPProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsConnected(false);
       setAddress(null);
+      setBootstrap(null);
       setStatus('idle');
       setError(null);
     }
   }
 
   const value = useMemo(
-    () => ({ isConnected, address, status, error, intent, signIn, signUp, logout, refreshBootstrap }),
-    [isConnected, address, status, error, intent],
+    () => ({ isConnected, address, status, error, intent, bootstrap, signIn, signUp, logout, refreshBootstrap }),
+    [isConnected, address, status, error, intent, bootstrap],
   );
 
   return <WaaPContext.Provider value={value}>{children}</WaaPContext.Provider>;

@@ -136,3 +136,18 @@ Plasmmer Accounts v0 should be reusable in:
 - [ ] Account-linking migration policy documented.
 - [ ] Incident playbook defined for provider downtime.
 - [ ] Shared SDK/module extracted for multi-app reuse.
+
+## Official Quick Start alignment notes (2026-02-20)
+
+Following the official WaaP Quick Start:
+
+- v0 implementation should mirror the documented onboarding sequence: SDK install, `initWaaP`, then config customization.
+- EVM flows should rely on the official EIP-1193 provider exposed at `window.waap` (not custom wallet transport wrappers by default).
+- Config governance must include these tracked dimensions:
+  - login methods (`authenticationMethods`)
+  - social allowlist (`allowedSocials`)
+  - project branding (name/logo/entry title)
+  - styles (dark/light)
+  - security badge visibility (`showSecured`)
+- Sui integration (`initWaaPSui`) is acknowledged as available but outside v0 delivery scope.
+- Product/design teams should use WaaP Playground before release to lock visual and auth config parity.
