@@ -4,7 +4,8 @@ import '../claude-pages.css';
 const pages = [
   { href: '/claude/profile', title: 'Plasmmmer Profile' },
   { href: '/claude/settings', title: 'Settings Page' },
-  { href: '/claude/settings-additions', title: 'Settings Additions' }
+  { href: '/claude/settings-additions', title: 'Settings Additions' },
+  { href: '/claude/access-request', title: 'Plasmmer Account Access Request' }
 ];
 
 export default function ClaudeLayoutsIndex() {
