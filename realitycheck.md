@@ -141,3 +141,46 @@ No incidente de segurança: formulário, fila e e-mail automático. A revoluçã
 Se vc quer Plasmmer vivo depois do primeiro ataque sério, arquitetura de conta precisa ser antifrágil e politicamente honesta: **identidade social pra reputação, múltiplos fatores pra poder, e rota de saída pra não virar refém de fornecedor**.
 
 Quer que eu faça depois uma versão em diagrama (mermaid) desse fluxo Bluesky+Google+WaaP com estados de risco e pontos de bloqueio/desbloqueio? 🧙‍♀️
+
+---
+
+🌈# 5) Embasamento com pesquisa web (fontes + leitura crítica)
+
+### Contexto técnico-político
+Pra não virar achismo de cripto-Twitter, aqui vai o lastro: padrão oficial Ethereum, especificações AT Protocol, docs oficiais do WaaP e README publicado no npm. Sem isso, qualquer decisão vira religião com gas fee.
+
+### Fontes consultadas (web)
+- EIP-1193 (Ethereum Provider JavaScript API): https://eips.ethereum.org/EIPS/eip-1193
+- ERC-4337 (Account Abstraction via alt mempool): https://eips.ethereum.org/EIPS/eip-4337
+- AT Protocol DID spec: https://atproto.com/specs/did
+- AT Protocol Handle spec: https://atproto.com/specs/handle
+- WaaP docs (quick-start / home): https://docs.wallet.human.tech/quick-start e https://docs.wallet.human.tech/
+- WaaP SDK README no npm: https://www.npmjs.com/package/@human.tech/waap-sdk
+
+### Dados que machucam (o que essas fontes sustentam)
+1. **Sobre provider e portabilidade de chain**
+   - O WaaP SDK se apresenta como provider **EIP-1193** (`window.waap.request(...)`), o que coloca ele no modelo padrão de provider EVM.
+   - EIP-1193 padroniza interface de provider, **não** garante por si só liberdade irrestrita de rede (isso depende de suporte do próprio provedor).
+
+2. **Sobre EOA vs AA no WaaP**
+   - No material público consultado (docs + README npm), o fluxo exemplificado é `eth_requestAccounts` / `eth_sendTransaction`.
+   - Não encontrei, no conteúdo público que revisei, evidência explícita de API focada em 4337 (ex: `eth_sendUserOperation`, EntryPoint explícito, bundler/paymaster nativos no fluxo descrito).
+   - **Leitura conservadora**: no estado atual da documentação pública revisada, WaaP aparenta operar primariamente como provider EVM no paradigma clássico (mais próximo de EOA/MPC UX), e **AA deve ser tratado como “não comprovado publicamente” até confirmação do fornecedor**.
+
+3. **Sobre risco de DID/handle Bluesky**
+   - As specs de DID/handle no AT Protocol deixam claro o papel de DNS/validação de handle e os riscos de confusão/impersonação por similaridade de nomes.
+   - Tradução pra produto: se reputação + acesso financeiro dependem de identificador social, o valor econômico do takeover sobe junto.
+
+### Conexões que ninguém quer fazer
+- “Segue padrão” não significa “resolve threat model”. EIP é interface, não seguro contra phishing.
+- “Tem social login” não significa “tem recovery seguro”. Segurança real mora em política, cooldown, e contestação.
+- “AA é o futuro” não significa “seu fornecedor implementa hoje”. Roadmap não assina transação.
+
+### Feitiço objetivo (próximo passo de validação técnica)
+Antes de fechar arquitetura definitiva, pedir ao fornecedor WaaP um checklist escrito:
+- [ ] método suportado para AA/4337 (sim/não), com exemplo real de `UserOperation`;
+- [ ] lista de chains suportadas em produção e sandbox;
+- [ ] dependência de bundler/paymaster próprios vs terceiros;
+- [ ] garantias de export/migração (exit plan) e SLA de recuperação.
+
+Se responderem com vaga poesia corporativa, já é resposta 😌
