@@ -6,8 +6,13 @@ export const waapConfig = {
   chainNamespace: 'eip155',
 };
 
+let hasLoggedMissingApiKeyNotice = false;
+
 export function assertWaaPConfig() {
-  if (!waapConfig.apiKey) {
-    throw new Error('Missing NEXT_PUBLIC_WAAP_API_KEY');
+  if (!waapConfig.apiKey && !hasLoggedMissingApiKeyNotice) {
+    // WaaP quick-start can run without a public API key in some environments.
+    // Keep this as a debug notice so local testing can continue without blocking auth flow.
+    console.info('[WaaP] NEXT_PUBLIC_WAAP_API_KEY is not set. Continuing with project-name based initialization.');
+    hasLoggedMissingApiKeyNotice = true;
   }
 }

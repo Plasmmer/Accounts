@@ -6,13 +6,15 @@ export type AuthIntent = 'signin' | 'signup';
 let initialized = false;
 
 function getWaaPConfig() {
-  const authenticationMethods: AuthenticationMethod[] = ['social'];
-  const allowedSocials: SocialProvider[] = ['bluesky'];
+  const authenticationMethods: AuthenticationMethod[] = ['email', 'phone', 'social'];
+  const allowedSocials: SocialProvider[] = ['google', 'bluesky'];
 
   return {
     authenticationMethods,
     allowedSocials,
-    showSecured: true,
+    styles: {
+      darkMode: false,
+    },
   };
 }
 
@@ -163,12 +165,6 @@ function localBootstrapByLoginMethod(input: { loginMethod: string; address: stri
 
 export async function connectWaaP(_intent: AuthIntent): Promise<string[]> {
   const waap = ensureWaaP();
-  const accounts = (await waap.request({ method: 'eth_requestAccounts' })) as string[];
-
-  if (accounts.length > 0) {
-    return accounts;
-  }
-
   await waap.login();
   return (await waap.request({ method: 'eth_requestAccounts' })) as string[];
 }
