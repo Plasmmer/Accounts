@@ -5,7 +5,8 @@ const pages = [
   { href: '/claude/profile', title: 'Plasmmmer Profile' },
   { href: '/claude/settings', title: 'Settings Page' },
   { href: '/claude/settings-additions', title: 'Settings Additions' },
-  { href: '/claude/access-request', title: 'Plasmmer Account Access Request' }
+  { href: '/claude/access-request', title: 'Plasmmer Account Access Request' },
+  { href: '/claude/family', title: 'Family & Dependants Manager' }
 ];
 
 export default function ClaudeLayoutsIndex() {
