@@ -1,4 +1,7 @@
-- based on https://docs.wallet.human.tech/quick-start: add email and phone as WaaP-based account recovery options (and show these on claude-made settings page!)
-- repo: add all of the Codex conversations
+- based on https://docs.wallet.human.tech/quick-start: add email and phone as WaaP-based account recovery options (and show these on claude-made settings page!) (part of the Safe's 1/N threshold?)
+- add a happy Plasmmer's 15 years (17/04/2011) on the dashboard <3
+
+repo:
+- add all of the Codex conversations
 - fix LFS readme.md screenshots issue
 - look at all of the commits past 20/02/2026 looking for authors' to fix
