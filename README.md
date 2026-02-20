@@ -1,6 +1,7 @@
 # Plasmmer Accounts
 
 This repository has been reset to focus on **Plasmmer Accounts v0 (2026)**.
+Migrated from the PHP age of the web2: straight into the top notch of Web3 account creation, recovery, integration and management!
 
 ## Current focus
 
