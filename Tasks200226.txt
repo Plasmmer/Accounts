@@ -1,4 +1,3 @@
-Plasmmer Accounts todo:
 - based on https://docs.wallet.human.tech/quick-start: add email and phone as WaaP-based account recovery options (and show these on claude-made settings page!)
 - settings page: your OpenClawd AI agents!
 - 'app is requesting access to your Plasmmer Account ; it will see your: name, email, avatar' mock screen
