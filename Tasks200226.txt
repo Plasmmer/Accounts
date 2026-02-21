@@ -1,9 +1,17 @@
-- based on https://docs.wallet.human.tech/quick-start: add email and phone as WaaP-based account recovery options (and show these on claude-made settings page!) (part of the Safe's 1/N threshold?)
 - add a happy Plasmmer's 15 years (17/04/2011) on the dashboard <3
+
+http://web.archive.org/web/20231231140206if_/https://plasmmer.com/icon.svg, https://www.waap.build/ (chng 'Continue with WaaP' txt to "Login or signup to Plasmmer"; upload Plasmmer icon then copy updted code then add to the current modal ; mk phone-only, email-only and bluesky-only modals to be called from Plasmmer Accounts' settings by a informed decision from the user and in a safe way
+
+- so there will be a max of WaaP 4 Ethereum keys: Google-derived ; then email-derived, phone-derived(may call Shatty for this instead of WaaP, optionally), bluesky-derived ; bluesky as a recovery method or as a WaaP? email and phone both required as recovery method or only 1 of them is enough?(but 1 vulnerable to hacks, other vulnerable to SIM-swap atks)
+
+- nao posso ficar acomodada no WaaP, que nao só tie com a alt-L1 Sui mas é um CENTRAL point of failure (ao contrario de email+senha+2FA em FHE)
+- imagina o proprio 2FA que protege sua conta google, sincronizado nessa mesma conta google?! acho que nada supera DAO-actioned social recovery...
+
+- read these 'Tokenplate'/'tokenbase' convos on Grok and GPT (2025's)
+[- based on https://docs.wallet.human.tech/quick-start: add email and phone as WaaP-based account recovery options (and show these on claude-made settings page!) (part of the Safe's 1/N threshold?)]
 - 'app is requesting access to your Plasmmer Accounts info' screen will abstract WaaPs EIP-1193?
 - before making the Safe creation factory, read: https://docs.safe.global/advanced/erc-4337/4337-safe
 - leave a task for later: deploying all existing users' Safes to the Plasmium chain
-- read these 'Tokenplate'/'tokenbase' convos on Grok and GPT (2025's)
 
 repo:
 - chk if 'https://github.com/Plasmmer/Accounts/tree/main/starter/nextjs-waap-bluesky/app/claude' didn't lose anything of 'https://github.com/Plasmmer/Accounts/tree/main/claude-work-190226'
