@@ -6,8 +6,15 @@ export type AuthIntent = 'signin' | 'signup';
 let initialized = false;
 
 function getWaaPConfig() {
-  const authenticationMethods: AuthenticationMethod[] = ['email', 'phone', 'social'];
-  const allowedSocials: SocialProvider[] = ['google', 'bluesky'];
+  const authenticationMethods: AuthenticationMethod[] = [
+    // 'email', // keep for future informed recovery option
+    // 'phone', // keep for future informed recovery option
+    'social',
+  ];
+  const allowedSocials: SocialProvider[] = [
+    'google',
+    // 'bluesky', // keep for future informed recovery option
+  ];
 
   return {
     authenticationMethods,
