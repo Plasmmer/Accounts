@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useWaaP } from '../components/waap.context';
 import { fetchAccountBootstrap } from '../lib/identity';
 
-function BlueskyIcon() {
-  return <span aria-hidden="true" style={{ fontSize: 18 }}>🦋</span>;
+function GoogleIcon() {
+  return <span aria-hidden="true" style={{ fontSize: 18 }}>🟢</span>;
 }
 
 export default function Home() {
@@ -25,17 +25,17 @@ export default function Home() {
   return (
     <main style={{ fontFamily: 'sans-serif', maxWidth: 760, margin: '3rem auto' }}>
       <h1>Plasmmer Accounts v0 Starter</h1>
-      <p>WaaP SDK integration enabled with Bluesky as the only social auth option.</p>
+      <p>WaaP SDK integration enabled with Google as the only auth option for now.</p>
 
       <section style={{ border: '1px solid #ddd', padding: '1rem', borderRadius: 8 }}>
         <h2>Auth Entry</h2>
-        <p>Sign in or signup calls WaaP directly. WaaP handles Bluesky-based key derivation/recovery flow.</p>
+        <p>Sign in or signup calls WaaP directly. The modal currently keeps only Google enabled.</p>
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
           <button onClick={signIn} disabled={isConnecting}>
-            <BlueskyIcon /> Sign in via WaaP
+            <GoogleIcon /> Sign in via WaaP
           </button>
           <button onClick={signUp} disabled={isConnecting}>
-            <BlueskyIcon /> Signup via WaaP
+            <GoogleIcon /> Signup via WaaP
           </button>
         </div>
 
@@ -47,7 +47,7 @@ export default function Home() {
         {isConnected ? <p>Connected address: {address}</p> : <p>Wallet not connected</p>}
         {bootstrap?.metadata ? (
           <p>
-            Address state for this Bluesky login: <strong>{bootstrap.metadata.addressStatus}</strong> ({bootstrap.metadata.storage})
+            Address state for this login: <strong>{bootstrap.metadata.addressStatus}</strong> ({bootstrap.metadata.storage})
           </p>
         ) : null}
         <div style={{ display: 'flex', gap: 8 }}>
