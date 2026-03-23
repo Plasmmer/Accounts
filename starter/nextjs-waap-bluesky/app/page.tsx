@@ -25,11 +25,11 @@ export default function Home() {
   return (
     <main style={{ fontFamily: 'sans-serif', maxWidth: 760, margin: '3rem auto' }}>
       <h1>Plasmmer Accounts v0 Starter</h1>
-      <p>WaaP SDK integration enabled with Google as the only auth option for now.</p>
+      <p>WaaP SDK integration enabled with Google first and Bluesky right below it in the auth popup.</p>
 
       <section style={{ border: '1px solid #ddd', padding: '1rem', borderRadius: 8 }}>
         <h2>Auth Entry</h2>
-        <p>Sign in or signup calls WaaP directly. The modal currently keeps only Google enabled.</p>
+        <p>Sign in or signup calls WaaP directly. The modal now keeps Google first and adds Bluesky underneath.</p>
         <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
           <button onClick={signIn} disabled={isConnecting}>
             <GoogleIcon /> Sign in via WaaP

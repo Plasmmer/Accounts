@@ -13,7 +13,7 @@ function getWaaPConfig() {
   ];
   const allowedSocials: SocialProvider[] = [
     'google',
-    // 'bluesky', // keep for future informed recovery option
+    'bluesky',
   ];
 
   return {
