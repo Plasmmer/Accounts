@@ -10,7 +10,10 @@ This file tracks work deliberately left outside the client-only correction PR. T
 - [ ] Compare published type declarations and runtime behavior for web SDK 1.2.0, 1.3.0, 2.0.0, and the current 2.x release. Record the first version where Bluesky is absent, if any.
 - [ ] Ask WaaP support for an authoritative compatibility answer if package declarations or Playground do not settle it.
 - [ ] Run an actual browser login test for Google and Bluesky against a staging project before changing the pinned SDK.
-- [ ] Do not infer provider removal or its motivation from a short allowedSocials example. Current WaaP web docs show Google, Twitter, and Discord; separate React Native SDK docs also list Bluesky. The web SDK source repository was not publicly inspectable during this review, so the version-to-version removal question remains unresolved.
+- [ ] Compare the maintained official web example at https://github.com/holonym-foundation/waap-examples/blob/main/waap-plain-nextjs/src/waap.config.ts. Its package uses @human.tech/waap-sdk ^2.3.0 and its current allowedSocials example lists Google, Twitter, Discord, and GitHub, but not Bluesky. The current WaaP web docs example also lists Google, Twitter, and Discord without Bluesky.
+- [ ] Keep the platform distinction explicit: the separate React Native SDK documentation still lists Bluesky among its social providers. This is evidence that Bluesky is no longer advertised in the current web integration examples, but it does not by itself prove that the web SDK rejects it at runtime.
+- [ ] Find a versioned web SDK declaration or run a small compatibility test against 1.2.0, 1.3.0, 2.0.0, 2.3.0, and 2.4.2 to establish whether and when the web SDK type/runtime stopped accepting Bluesky. The SDK source repository/package declarations were not inspectable in this review.
+- [ ] Do not infer a political or customer-pressure motive without a release note, issue, commit, or maintainer statement. No such evidence was found in the sources inspected.
 - [ ] Once compatibility is confirmed, migrate from @human.tech/waap-sdk 1.2.0 to a selected supported 2.x release. Review breaking API changes (login, logout, provider initialization, environment selection, event lifecycle) rather than changing the version string alone.
 
 ## P1 — Client-only identity boundaries
