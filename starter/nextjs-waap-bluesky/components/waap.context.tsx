@@ -1,20 +1,28 @@
 'use client';
 
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import { assertWaaPConfig } from './waap.config';
-import { connectWaaP, disconnectWaaP, fetchAccountBootstrap, type AccountBootstrapResponse } from '../lib/identity';
-
-type AuthIntent = 'signin' | 'signup';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  connectWaaP,
+  disconnectWaaP,
+  fetchAccountBootstrap,
+  getWaaPProvider,
+  type AccountBootstrapResponse,
+} from '../lib/identity';
 
 type WaaPContextValue = {
   isConnected: boolean;
   address: string | null;
   status: 'idle' | 'connecting' | 'connected' | 'error';
   error: string | null;
-  intent: AuthIntent;
   bootstrap: AccountBootstrapResponse | null;
-  signIn: () => Promise<void>;
-  signUp: () => Promise<void>;
+  connect: () => Promise<void>;
   logout: () => Promise<void>;
   refreshBootstrap: () => Promise<void>;
 };
@@ -26,72 +34,103 @@ export function WaaPProvider({ children }: { children: React.ReactNode }) {
   const [address, setAddress] = useState<string | null>(null);
   const [status, setStatus] = useState<WaaPContextValue['status']>('idle');
   const [error, setError] = useState<string | null>(null);
-  const [intent, setIntent] = useState<AuthIntent>('signin');
   const [bootstrap, setBootstrap] = useState<AccountBootstrapResponse | null>(null);
 
-  async function completeAuth(nextIntent: AuthIntent) {
+  const refreshBootstrap = useCallback(async () => {
+    try {
+      const account = await fetchAccountBootstrap();
+      setBootstrap(account);
+      setAddress(account.address);
+      setIsConnected(Boolean(account.address));
+      setStatus(account.address ? 'connected' : 'idle');
+      setError(null);
+    } catch (cause) {
+      setStatus('error');
+      setError(cause instanceof Error ? cause.message : 'Could not load the local account');
+    }
+  }, []);
+
+  const connect = useCallback(async () => {
     try {
       setStatus('connecting');
       setError(null);
-      setIntent(nextIntent);
-      assertWaaPConfig();
 
-      const accounts = await connectWaaP(nextIntent);
-      const primaryAddress = accounts[0] ?? null;
+      const accounts = await connectWaaP();
+      if (!accounts[0]) {
+        setStatus('idle');
+        return;
+      }
 
-      setAddress(primaryAddress);
-      setIsConnected(Boolean(primaryAddress));
-      setStatus(primaryAddress ? 'connected' : 'idle');
-    } catch (e) {
+      // Complete the local account bootstrap immediately after WaaP login.
+      await refreshBootstrap();
+    } catch (cause) {
       setStatus('error');
-      setError(e instanceof Error ? e.message : 'WaaP authentication failed');
+      setError(cause instanceof Error ? cause.message : 'WaaP authentication failed');
     }
-  }
+  }, [refreshBootstrap]);
 
-  async function signIn() {
-    await completeAuth('signin');
-  }
-
-  async function signUp() {
-    await completeAuth('signup');
-  }
-
-  async function refreshBootstrap() {
-    try {
-      const bootstrap = await fetchAccountBootstrap();
-      setBootstrap(bootstrap);
-      setAddress(bootstrap.address);
-      setIsConnected(Boolean(bootstrap.address));
-      setStatus(bootstrap.address ? 'connected' : 'idle');
-      setError(null);
-    } catch (e) {
-      setStatus('error');
-      setError(e instanceof Error ? e.message : 'Account bootstrap failed');
-    }
-  }
-
-  async function logout() {
+  const logout = useCallback(async () => {
     try {
       await disconnectWaaP();
-    } finally {
       setIsConnected(false);
       setAddress(null);
       setBootstrap(null);
       setStatus('idle');
       setError(null);
+    } catch (cause) {
+      setStatus('error');
+      setError(cause instanceof Error ? cause.message : 'WaaP logout failed');
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    const clearDisconnectedState = () => {
+      if (!active) return;
+      setIsConnected(false);
+      setAddress(null);
+      setBootstrap(null);
+      setStatus('idle');
+    };
+
+    const syncAccounts = () => {
+      if (active) void refreshBootstrap();
+    };
+
+    let provider: ReturnType<typeof getWaaPProvider> | undefined;
+
+    try {
+      provider = getWaaPProvider();
+      provider.on?.('accountsChanged', syncAccounts);
+      provider.on?.('chainChanged', syncAccounts);
+      provider.on?.('connect', syncAccounts);
+      provider.on?.('disconnect', clearDisconnectedState);
+      void refreshBootstrap();
+    } catch (cause) {
+      setStatus('error');
+      setError(cause instanceof Error ? cause.message : 'WaaP provider initialization failed');
+    }
+
+    return () => {
+      active = false;
+      provider?.removeListener?.('accountsChanged', syncAccounts);
+      provider?.removeListener?.('chainChanged', syncAccounts);
+      provider?.removeListener?.('connect', syncAccounts);
+      provider?.removeListener?.('disconnect', clearDisconnectedState);
+    };
+  }, [refreshBootstrap]);
 
   const value = useMemo(
-    () => ({ isConnected, address, status, error, intent, bootstrap, signIn, signUp, logout, refreshBootstrap }),
-    [isConnected, address, status, error, intent, bootstrap],
+    () => ({ isConnected, address, status, error, bootstrap, connect, logout, refreshBootstrap }),
+    [isConnected, address, status, error, bootstrap, connect, logout, refreshBootstrap],
   );
 
   return <WaaPContext.Provider value={value}>{children}</WaaPContext.Provider>;
 }
 
 export function useWaaP() {
-  const ctx = useContext(WaaPContext);
-  if (!ctx) throw new Error('useWaaP must be used inside WaaPProvider');
-  return ctx;
+  const context = useContext(WaaPContext);
+  if (!context) throw new Error('useWaaP must be used inside WaaPProvider');
+  return context;
 }

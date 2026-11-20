@@ -1,73 +1,51 @@
-# Plasmmer Accounts v0 — Next.js Starter (Bluesky + WaaP)
+# Plasmmer Accounts v0 — Client-only WaaP Starter
 
-This starter now uses the **official WaaP SDK** with a WaaP-first UX and Bluesky as the only social authentication option.
+This starter intentionally has **no Plasmmer backend**. WaaP provides the wallet authentication experience; Plasmmer keeps a small, browser-local record keyed by the full normalized EVM address.
 
-## What works now
+## What works
 
-- Sign in and Signup buttons call WaaP SDK directly.
-- WaaP is initialized with `authenticationMethods: ['social']` and `allowedSocials: ['bluesky']`.
-- Wallet address is requested through `eth_requestAccounts` / `eth_accounts`.
-- Login method is resolved via `waap.getLoginMethod()`.
-- Account bootstrap works in pure JS (`localStorage`) by default, with optional `POST /api/accounts/bootstrap` mode.
+- Initializes WaaP with social authentication configured for Google and Bluesky.
+- Opens WaaP authentication from one entry point; WaaP decides whether the user is new or returning.
+- Requests EVM accounts through eth_requestAccounts and restores an existing connection through eth_accounts.
+- Automatically creates or restores a local account record after connection and when the provider reports account changes.
+- Uses a collision-resistant browser-local account ID, unique per wallet address in this browser profile.
+- Migrates legacy local records that were keyed by getLoginMethod() when their stored address matches the connected wallet.
 
-## 1) Install
+## Important scope and trust limits
 
-```bash
-npm install
-npm run dev
-```
+- No Plasmmer API route, server adapter, database, session server, or cloud persistence is included.
+- localStorage is scoped to this browser profile and origin. Clearing browser data removes the local record; another browser/device will create its own record.
+- A local account ID is not a globally registered or portable Plasmmer identity.
+- The current flow does not retrieve or verify a Bluesky DID. blueskyDid remains null.
+- The browser is not a trusted authority. A client-only local record must not be treated as proof of identity or used to authorize valuable actions.
+- WaaP remains an external authentication/wallet dependency. Its availability and supported social providers are controlled by WaaP.
 
-## 2) Configure env
+## Install and run
 
-Create `.env.local`:
+    npm install
+    npm run dev
 
-```bash
-NEXT_PUBLIC_WAAP_API_KEY=replace_me
-NEXT_PUBLIC_WAAP_ENV=sandbox
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=optional_but_recommended
-NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
-NEXT_PUBLIC_ACCOUNTS_BOOTSTRAP_MODE=local # default is local, set api to force /api/accounts/bootstrap
-```
+Create .env.local only when using WalletConnect features that require a project ID:
 
-## 3) Integration seams
+    NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_project_id
 
-These files are the core integration points:
+No Plasmmer backend environment variables are required.
 
-- `components/waap.context.tsx`
-- `lib/identity.ts`
+## Core integration files
 
-## 4) Bootstrap modes
+- components/waap.context.tsx — React state, provider events, automatic restoration.
+- lib/identity.ts — WaaP initialization and browser-local account records.
+- types/waap-window.d.ts — TypeScript declaration for window.waap.
 
-### Local-first (default, no custom backend required)
+## Provider configuration
 
-- `fetchAccountBootstrap` persists `loginMethod -> accountId/address` in browser `localStorage`.
-- Useful for Manus/local testing of **Bluesky login -> new/old Ethereum key** flows with pure JS.
-- The UI shows `addressStatus` (`new` / `existing`) for quick validation.
+The currently pinned WaaP SDK is 1.2.0. Its integration config requests social authentication and allows Google plus Bluesky.
 
-### API mode (optional)
+Do not assume the Bluesky option is available in every later web SDK release. See docs/ToDo.md for the version investigation and migration gate. The current official WaaP web documentation examples show Google, Twitter, and Discord, while the separate React Native SDK documentation also lists Bluesky. This is not enough evidence to claim that Bluesky was deliberately removed from the web SDK.
 
-- `POST /api/accounts/bootstrap` upserts `address -> accountId` and returns canonical bootstrap payload.
-- Adapter seam lives at `lib/server/accounts-adapter.ts` for swapping in production DB implementations.
+## Development checks
 
-## 5) Current scope
+    npm run build
+    npm run lint
 
-- This starter focuses on front-end WaaP orchestration and wallet state.
-- Production backend session persistence / account linking must still be implemented in your app backend.
-
-## 6) Notes for Manus
-
-Manus stays UI-focused in this handoff: keep working on login/signup UX states, while backend contract design and production DB rollout remain outside Manus ownership.
-
-## 7) Quick Start parity checklist (official WaaP docs)
-
-This starter is aligned to the official `quick-start` flow:
-
-- ✅ SDK installed via `@human.tech/waap-sdk`
-- ✅ WaaP initialized using `initWaaP`
-- ✅ Auth/UI configuration applied through init config
-- ✅ EVM provider consumed as EIP-1193 (`window.waap`)
-
-Recommended team practice:
-
-- Use WaaP Playground (`https://docs.wallet.human.tech/playground`) to generate config snapshots and copy them into PR notes.
-- Keep Sui (`initWaaPSui`) as a documented extension path, not part of v0 acceptance criteria.
+The repository still needs automated unit, browser, and WaaP staging tests; those are tracked in docs/ToDo.md.

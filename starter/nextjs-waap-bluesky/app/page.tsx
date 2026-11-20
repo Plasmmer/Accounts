@@ -1,65 +1,48 @@
 'use client';
 
-import { useState } from 'react';
 import { useWaaP } from '../components/waap.context';
-import { fetchAccountBootstrap } from '../lib/identity';
-
-function GoogleIcon() {
-  return <span aria-hidden="true" style={{ fontSize: 18 }}>🟢</span>;
-}
 
 export default function Home() {
-  const { isConnected, address, signIn, signUp, logout, refreshBootstrap, status, error, intent, bootstrap } = useWaaP();
-  const [bootstrapRaw, setBootstrapRaw] = useState<string>('not loaded');
+  const { isConnected, address, connect, logout, refreshBootstrap, status, error, bootstrap } = useWaaP();
   const isConnecting = status === 'connecting';
 
-  async function loadBootstrap() {
-    try {
-      const data = await fetchAccountBootstrap();
-      setBootstrapRaw(JSON.stringify(data, null, 2));
-    } catch (e) {
-      setBootstrapRaw(e instanceof Error ? e.message : 'bootstrap error');
-    }
-  }
-
   return (
-    <main style={{ fontFamily: 'sans-serif', maxWidth: 760, margin: '3rem auto' }}>
+    <main style={{ fontFamily: 'sans-serif', maxWidth: 760, margin: '3rem auto', padding: '0 1rem' }}>
       <h1>Plasmmer Accounts v0 Starter</h1>
-      <p>WaaP SDK integration enabled with Google first and Bluesky right below it in the auth popup.</p>
+      <p>WaaP handles wallet authentication. Plasmmer keeps a small account record locally in this browser.</p>
 
       <section style={{ border: '1px solid #ddd', padding: '1rem', borderRadius: 8 }}>
-        <h2>Auth Entry</h2>
-        <p>Sign in or signup calls WaaP directly. The modal now keeps Google first and adds Bluesky underneath.</p>
-        <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-          <button onClick={signIn} disabled={isConnecting}>
-            <GoogleIcon /> Sign in via WaaP
-          </button>
-          <button onClick={signUp} disabled={isConnecting}>
-            <GoogleIcon /> Signup via WaaP
-          </button>
-        </div>
+        <h2>Authentication</h2>
+        <p>Continue with WaaP. The provider handles whether this is a first-time or returning login.</p>
+        <button onClick={connect} disabled={isConnecting}>
+          {isConnecting ? 'Connecting…' : 'Continue with WaaP'}
+        </button>
 
         <h2>Wallet State</h2>
         <p>Status: {status}</p>
-        <p>Last intent: {intent}</p>
-        <p>Bootstrap mode: {process.env.NEXT_PUBLIC_ACCOUNTS_BOOTSTRAP_MODE === 'api' ? 'api route' : 'local (pure JS)'}</p>
-        {error ? <p style={{ color: 'crimson' }}>Error: {error}</p> : null}
+        {error ? <p role="alert" style={{ color: 'crimson' }}>Error: {error}</p> : null}
         {isConnected ? <p>Connected address: {address}</p> : <p>Wallet not connected</p>}
         {bootstrap?.metadata ? (
           <p>
-            Address state for this login: <strong>{bootstrap.metadata.addressStatus}</strong> ({bootstrap.metadata.storage})
+            Local account: <strong>{bootstrap.metadata.addressStatus}</strong> ({bootstrap.metadata.storage})
           </p>
         ) : null}
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={logout} disabled={!isConnected || isConnecting}>Logout</button>
-          <button onClick={refreshBootstrap} disabled={isConnecting}>Refresh Bootstrap</button>
-          <button onClick={loadBootstrap} disabled={isConnecting}>Load Account Bootstrap</button>
+
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button onClick={logout} disabled={!isConnected || isConnecting}>Log out from WaaP</button>
+          <button onClick={refreshBootstrap} disabled={isConnecting}>Refresh local account</button>
         </div>
       </section>
 
       <section style={{ marginTop: '1rem' }}>
-        <h2>Bootstrap Response</h2>
-        <pre>{bootstrapRaw}</pre>
+        <h2>Local Account Record</h2>
+        <p>
+          This record is stored in browser localStorage. It is not a server account, a verified Bluesky identity,
+          or a cross-device profile.
+        </p>
+        <pre style={{ overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+          {bootstrap ? JSON.stringify(bootstrap, null, 2) : 'No account record loaded.'}
+        </pre>
       </section>
     </main>
   );

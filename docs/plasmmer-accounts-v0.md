@@ -2,152 +2,68 @@
 
 ## Overview
 
-**Plasmmer Accounts v0** replaces the earlier Zama/Arcium FHE+MPC direction with a practical identity + wallet onboarding flow:
+**Plasmmer Accounts v0 is a client-only wallet onboarding layer.** WaaP handles the external wallet authentication experience; Plasmmer stores a lightweight account record in the user's browser.
 
-1. User enters through **WaaP.xyz** authentication.
-2. Inside WaaP, the user authenticates with **Bluesky** (only enabled identity option).
-3. WaaP derives and manages an **Ethereum address** for seedless app access.
-
-This document is the implementation baseline for product and engineering.
-
----
+There is deliberately no Plasmmer-hosted API, database, server-side session service, or bootstrap backend in v0.
 
 ## Goals
 
-- Provide a seedless signup/login experience for web3-enabled apps.
-- Use WaaP.xyz as the user-facing entry point with Bluesky-only identity inside WaaP.
-- Use WaaP.xyz for wallet session management and Ethereum address derivation.
-- Standardize integration across multiple downstream projects.
+- Provide a browser-based WaaP entry point for wallet connection.
+- Restore a previously connected WaaP EVM address when the provider makes it available.
+- Create a stable local record per full EVM wallet address in the current browser profile.
+- Keep the integration reusable as a client-side module across Plasmmer apps.
 
-## Non-goals
+## Non-goals and trust limits
 
-- Reintroducing phpFox-era account systems.
-- Building custom FHE/MPC infrastructure in v0.
-- Supporting every wallet provider in the first release.
+- No backend account registry or cross-device synchronization.
+- No Plasmmer-issued server session.
+- No server-side identity verification.
+- No claim that a locally stored DID or wallet address proves a real-world or social identity.
+- No server-side recovery if browser storage is cleared.
 
----
+## Client flow
 
-## Core Flow (Signup / Login)
+1. The user selects Continue with WaaP.
+2. WaaP presents its configured authentication options and handles the external authentication experience.
+3. The app requests eth_requestAccounts.
+4. The app normalizes and validates the full EVM address.
+5. A browser-local record is created or loaded using the full normalized address as the storage key.
+6. On page reload, the app requests eth_accounts and restores the local record when WaaP exposes a connected address.
+7. accountsChanged, chainChanged, connect, and disconnect events update the React account state.
 
-### A. Signup
+The app does not interpret waap.getLoginMethod() as a person identifier. A wallet connection method is not a social identity or a Plasmmer account ID.
 
-1. User clicks **Continue with WaaP**.
-2. WaaP login modal/page opens with **Bluesky as the only enabled identity option**.
-3. User authenticates to Bluesky through WaaP.
-4. Backend verifies WaaP-authenticated Bluesky identity and issues an app session token.
-5. App initializes WaaP context/provider.
-6. WaaP returns wallet context and an EVM-compatible account.
-7. App stores the derived Ethereum address linked to the Bluesky identity.
-8. User enters the application as an authenticated account.
+## Local data model
 
-### B. Login (returning user)
+The browser stores records under the origin-scoped key plasmmer.accounts.v0.local.
 
-1. User clicks **Continue with WaaP**.
-2. WaaP handles identity re-auth via Bluesky (only option).
-3. App resolves existing account record.
-4. App restores WaaP session (or requests re-auth if expired).
-5. App confirms Ethereum address binding and enters with active identity + wallet context.
+Each record contains:
 
-### C. Failure/Recovery Paths
+- A random browser-local account ID.
+- The full lower-case EVM address.
+- Creation and last-update timestamps.
 
-- **WaaP/Bluesky identity success, wallet failure:** create partial session state and prompt wallet retry.
-- **WaaP success, Bluesky verification failure:** do not finalize app login.
-- **Address mismatch on returning user:** lock high-risk actions, require explicit re-link flow.
-- **Provider outage:** fallback banner + retry queue for wallet-dependent actions.
+The record is keyed by the full normalized address, not by a truncated address or a shared provider-method string. Legacy entries keyed by getLoginMethod() are migrated only when their stored address matches; their old shared account ID is replaced.
 
----
+blueskyDid remains null until the app has a supported and trustworthy identity-claim flow. The presence of a Bluesky button in WaaP does not, by itself, provide Plasmmer with a verified DID.
 
-## Architecture
+## Persistence and recovery
 
-### Frontend
+localStorage is scoped to the browser profile and origin:
 
-- Add a `WaaPProvider` at app root.
-- Use a `useWaaP`-style hook in account-aware components.
-- Keep identity state (Bluesky) and wallet state (WaaP) explicit and separately observable.
+- A different browser/device creates a separate local record.
+- A different app origin has separate storage.
+- Clearing site data removes the local record.
+- A user who reconnects the same WaaP address in the same browser profile receives the existing local record.
 
-### Backend
+This local record is convenience state only. It must not authorize valuable actions or be treated as an authoritative identity registry.
 
-- Verify Bluesky identity tokens.
-- Map `bluesky_user_id -> internal_account_id -> ethereum_address`.
-- Expose account bootstrap endpoint that returns:
-  - account id
-  - linked address
-  - session flags (`needs_waap_reauth`, `wallet_unlinked`, etc.)
+## WaaP integration
 
-### Data Model (minimum)
+The starter currently pins @human.tech/waap-sdk 1.2.0, initializes the SDK with social authentication, and requests Google plus Bluesky in allowedSocials.
 
-- `accounts`
-  - `id`
-  - `bluesky_did` (unique)
-  - `created_at`, `updated_at`
-- `wallet_links`
-  - `account_id`
-  - `provider` (`waap`)
-  - `chain_namespace` (`eip155`)
-  - `address`
-  - `status` (`active`, `pending_relink`, `revoked`)
+Provider support must be validated against the exact web SDK version. The current official WaaP web docs example does not list Bluesky, while separate React Native SDK docs do. Do not remove or assume support for Bluesky based only on that difference. See ToDo.md for the version investigation and migration gate.
 
----
+## Integration targets
 
-## Security & Trust Assumptions
-
-- Key custody and key-share handling are delegated to WaaP’s architecture.
-- App never stores raw private keys.
-- Account binding must require a verified Bluesky identity.
-- Sensitive actions should require session freshness checks.
-- Add abuse controls for account creation bursts.
-
----
-
-## Integration Targets
-
-Plasmmer Accounts v0 should be reusable in:
-
-- RunnyCar
-- GamlrOnchain
-- Megaxolotls
-- heyplate / lenstter
-
-### Integration checklist (per app)
-
-- [ ] Add shared Plasmmer Accounts v0 auth module.
-- [ ] Add WaaP login button/entry route (Bluesky-only within WaaP).
-- [ ] Add WaaP provider + wallet session handling.
-- [ ] Persist/consume linked Ethereum address.
-- [ ] Gate wallet-required features on wallet availability.
-- [ ] Add telemetry for auth and wallet failure modes.
-
----
-
-## Open Questions
-
-- Exact Bluesky auth method and token verification strategy to standardize across apps.
-- Address-linking policy for users who already have a legacy wallet in an integrated app.
-- Session lifetime defaults and re-auth thresholds.
-- Supported EVM chains for v0 launch.
-- Gas sponsorship policy for first-party transactions.
-
----
-
-## Delivery Readiness (v0)
-
-- [ ] Auth spec approved by product + backend.
-- [ ] WaaP integration validated in one reference app.
-- [ ] Account-linking migration policy documented.
-- [ ] Incident playbook defined for provider downtime.
-- [ ] Shared SDK/module extracted for multi-app reuse.
-
-## Official Quick Start alignment notes (2026-02-20)
-
-Following the official WaaP Quick Start:
-
-- v0 implementation should mirror the documented onboarding sequence: SDK install, `initWaaP`, then config customization.
-- EVM flows should rely on the official EIP-1193 provider exposed at `window.waap` (not custom wallet transport wrappers by default).
-- Config governance must include these tracked dimensions:
-  - login methods (`authenticationMethods`)
-  - social allowlist (`allowedSocials`)
-  - project branding (name/logo/entry title)
-  - styles (dark/light)
-  - security badge visibility (`showSecured`)
-- Sui integration (`initWaaPSui`) is acknowledged as available but outside v0 delivery scope.
-- Product/design teams should use WaaP Playground before release to lock visual and auth config parity.
+Downstream apps can reuse the client module, but each origin has its own browser-local record. A shared, portable Plasmmer identity across apps is outside the current v0 scope.
