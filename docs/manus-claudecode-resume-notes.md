@@ -1,44 +1,33 @@
 # Manus / ClaudeCode Resume Notes
 
-Date: 2026-02-20
+Historical implementation notes: 2026-02-20.
 
-## What was completed now
+## Current status (2026-11-20)
 
-- Replaced local fake callback/bootstrap API simulation with direct official WaaP SDK calls in the frontend integration seam.
-- Added backend adapter route `POST /api/accounts/bootstrap` with an explicit adapter seam for production DB swap.
-- Added real WaaP initialization (`initWaaP`) configured to allow only Bluesky social auth.
-- Sign in / Signup buttons now trigger WaaP provider flow and wallet account retrieval through `eth_requestAccounts`.
-- Bootstrap state now resolves from `waap.getLoginMethod()` + `eth_accounts`.
+The v0 scope is explicitly **client-only**. The former optional API bootstrap route and in-memory server adapter have been removed. The app stores browser-local metadata keyed by the full normalized EVM address.
 
-## Internet-enabled verification done
+The current code no longer uses waap.getLoginMethod() as an account identity. It must not be interpreted as a Bluesky DID or as a unique person identifier.
 
-- Confirmed npm registry access in this environment.
-- Installed `@human.tech/waap-sdk` and integrated it in starter code.
-- Inspected SDK types to confirm `allowedSocials` supports `bluesky` and `authenticationMethods` supports `social`.
+The browser-local account record is not a globally registered Plasmmer identity, is not synchronized between devices/origins, and does not establish a verified Bluesky identity. blueskyDid remains null.
 
-## Remaining production tasks
+## Historical work completed on 2026-02-20
 
-1. Replace in-memory adapter with production database implementation (Prisma/Postgres or equivalent).
-2. Add backend verification pipeline to persist trusted Bluesky DID claims from WaaP auth artifacts.
-3. Add secure API auth/session controls for `/api/accounts/bootstrap` (JWT/session token + CSRF strategy as needed).
-4. Add end-to-end tests against staging WaaP project credentials.
-5. Finalize app-specific chain support policy and gas sponsorship policy.
+- Integrated @human.tech/waap-sdk into the Next.js starter.
+- Initialized WaaP with social authentication configuration.
+- Added a React context for wallet state.
+- Added an initial bootstrap flow and an in-memory API adapter as an early experiment. This backend experiment is no longer part of the v0 product scope.
 
-## Chain-support notes from installed SDK package
+## Remaining work
 
-- EVM network set exposed through WalletConnect adapter import path includes: mainnet, sepolia, optimism, arbitrum, polygon, gnosis, avalanche, aurora, fantom, base, celo.
-- SDK package exports dedicated Sui integration (`initWaaPSui`).
-- Bitcoin support was **not** explicitly discoverable from this SDK package surface during local inspection, so it still requires confirmation from official WaaP docs/support.
+See ToDo.md for the active list, including:
+- WaaP web SDK 2.x and Bluesky compatibility investigation.
+- Dependency refresh and lockfile regeneration.
+- Browser/unit tests and CI.
+- Optional future DID verification, portable identity, and wallet linking.
+- Solidity mock redesign and security tests.
 
-## Scope reminder
+## Historical SDK observations
 
-- Manus remains UI-focused in this handoff and should not own production `/api/*` contract design or DB rollout.
+The original 2026-02-20 implementation inspected @human.tech/waap-sdk 1.2.0 and @human.tech/waap-interface-core 0.2.0, whose types accepted bluesky in the configured social-provider list.
 
-## Quick Start page validation updates (2026-02-20)
-
-Official Quick Start review confirms:
-
-- Recommended bootstrap is a 3-step path (install SDK, initialize WaaP, customize config).
-- EVM compatibility promise is explicitly EIP-1193 via `window.waap` for wagmi/ethers/viem/plain JS.
-- Official docs promote WaaP Playground for generating init config; this should be used as a reproducible config source in delivery notes.
-- Sui path is first-class (`initWaaPSui`) but remains out-of-scope for current Plasmmer Accounts v0 execution.
+That observation establishes support in the inspected version only. It does not establish continued support in later web SDK releases. The current WaaP web documentation and the separate React Native SDK documentation differ in their listed social providers; see ToDo.md for the unresolved version-by-version check.

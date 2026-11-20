@@ -2,89 +2,55 @@
 
 ## Objective
 
-Ship a production-ready account layer that combines:
+Ship a reusable, client-only WaaP wallet onboarding module with browser-local account metadata.
 
-1. **WaaP.xyz-first authentication with Bluesky as the only login option**
-2. **WaaP.xyz wallet session + Ethereum address derivation**
+The v0 implementation deliberately does not include a Plasmmer backend, hosted database, or server-side session layer.
 
-for reuse across:
+## Phase 1 — Client reference implementation
 
-- RunnyCar
-- GamlrOnchain
-- Megaxolotls
-- heyplate/lenstter
-
-## Phase 1 — Reference implementation (single app)
-
-- Add app-shell account module (`accounts-core`) with:
-  - identity state machine
-  - wallet state machine
-  - account bootstrap API client
-- Add WaaP auth callback route with Bluesky-only token validation endpoint.
-- Add WaaP provider at root and account context bridge.
-- Persist mapping: `bluesky_did -> account_id -> eth_address`.
+- Initialize WaaP once in the browser.
+- Configure the selected social authentication methods.
+- Request wallet accounts through EIP-1193.
+- Store a local account record per full normalized EVM address.
+- Restore the local record after reload when WaaP exposes an existing account.
+- Listen to provider account, chain, connection, and disconnection events.
+- Explain local persistence and trust limits in the UI and README.
 
 ### Exit criteria
 
-- New user can complete WaaP sign-in (Bluesky-only identity) and receive linked Ethereum address.
-- Returning user can restore both identity and wallet session.
-- Failure states surface actionable UI.
+- First-time connection creates a unique browser-local account ID.
+- Reconnecting the same wallet in the same browser profile restores the same ID.
+- Two different wallet addresses never share the same local account ID.
+- A page reload restores available provider state.
+- A provider account change loads the matching local record.
+- Logout clears the app state and follows the pinned WaaP SDK's logout behavior.
 
-## Phase 2 — Harden auth and recovery paths
+## Phase 2 — Compatibility and quality
 
-- Add explicit partial-session state (`identity_ok_wallet_pending`).
-- Add address mismatch and relinking policy/UX.
-- Add session freshness requirements for sensitive actions.
-- Add telemetry events for each auth/wallet state transition.
+- Verify social-provider support against the exact WaaP web SDK version.
+- Add unit and browser tests for local account lifecycle and provider events.
+- Add CI for typecheck, lint, build, and tests.
+- Refresh dependencies with a regenerated lockfile.
+- Document the local-only boundary for every downstream integration.
 
-### Exit criteria
+## Phase 3 — Optional future identity portability
 
-- All critical failure paths tested in staging.
-- Incident runbook for WaaP/Bluesky outage exists.
+This phase requires a separate product decision and is not required for v0:
 
-## Phase 3 — Multi-app rollout
+- Explore wallet linking with explicit signatures.
+- Explore trustworthy AT Protocol DID resolution and claims.
+- Define export/import and multi-wallet recovery.
+- Decide whether a portable Plasmmer identity is worth introducing a trusted external service or another verifiable mechanism.
 
-- Extract shared package for auth + wallet orchestration.
-- Implement app adapters for each target app.
-- Standardize analytics and support playbooks.
+## Non-goals
 
-### Exit criteria
+- Plasmmer backend APIs.
+- Server-side account persistence.
+- Server-side session issuance.
+- Cross-device account synchronization.
+- Backend DID verification or database account linking.
+- Production smart contracts for the settings mock.
 
-- At least 2 downstream apps fully integrated.
-- Remaining apps have implementation PRs opened.
+## Dependency note
 
-## Engineering tasks (starter backlog)
-
-1. Define TypeScript interfaces:
-   - `IdentityState`
-   - `WalletState`
-   - `AccountBootstrapResponse`
-2. Implement account bootstrap endpoint contract.
-3. Add feature flag: `plasmmer_accounts_v0_enabled`.
-4. Add auth integration tests for:
-   - first-time signup
-   - returning login
-   - WaaP/Bluesky identity success + wallet failure
-   - WaaP session success + Bluesky verification failure
-5. Add observability dashboard for onboarding funnel.
-
-## Non-goals for v0
-
-- Custom MPC/FHE infra.
-- Multi-provider wallet abstraction.
-- Full account migration from every legacy auth method.
-
-## Quick Start alignment updates (source: docs.wallet.human.tech/quick-start)
-
-### Required baseline in Phase 1
-
-- Keep SDK install/init as explicit acceptance criteria (`@human.tech/waap-sdk`, `initWaaP`).
-- Ensure init config review includes: auth methods, allowed socials, project info, style options, and `showSecured` behavior.
-- Treat `window.waap` EIP-1193 compatibility as a testable requirement against at least one library stack (viem or ethers).
-- Add a documented decision note for `useStaging` value per environment.
-
-### Added engineering tasks
-
-6. Add a "WaaP Playground config snapshot" artifact to docs for reproducible init settings.
-7. Add automated smoke test that confirms provider availability (`window.waap`) before auth UI enables login actions.
-8. Add explicit non-goal note for Sui in v0 and a planned seam (`initWaaPSui`) for post-v0.
+The current starter pins Next.js 15.5.15, React 18.3.1, and WaaP SDK 1.2.0. Dependency refresh is tracked in ToDo.md, because the WaaP 2.x web-provider migration must be validated against the Bluesky requirement and lockfile regeneration must be performed with npm rather than by hand.
